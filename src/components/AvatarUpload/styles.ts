@@ -10,3 +10,14 @@ export const Container = styled.div`
   background: var(--gray-100);
   border: 1px dashed var(--gray-300);
 `;
+
+
+export const Display = styled.div`
+  width: 400px;
+  height: 400px;
+
+  img{
+    width: 400px;
+    height: 400px;
+  }
+`;

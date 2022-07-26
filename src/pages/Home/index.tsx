@@ -2,8 +2,12 @@ import {
   Container
 } from './styles';
 import { AvatarUpload } from '../../components/AvatarUpload';
+import { useState } from 'react';
+import { Demo } from '../../components/CropImage';
 
 export function Home() {
+
+  const [selectedFile, setSelectedFile] = useState<File>();
 
   const handleSubmitForm = (evt: any) => {
     evt.preventDefault();
@@ -12,12 +16,16 @@ export function Home() {
 
   return (
     <Container>
-      <form
+      {/* <form
         onSubmit={handleSubmitForm}
       >
-        <AvatarUpload name="avatarUpload" />
+        <AvatarUpload
+          name="avatarUpload"
+          // onChange={(evt) => setSelectedFile(evt.target.files[0])}
+        />
         <button type="submit">submit</button>
-      </form>
+      </form> */}
+      <Demo />
     </Container>
   );
 }
