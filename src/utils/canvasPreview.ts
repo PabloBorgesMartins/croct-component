@@ -25,8 +25,9 @@ export async function canvasPreview(
   const pixelRatio = window.devicePixelRatio
   // const pixelRatio = 1
 
-  canvas.width = Math.floor(crop.width * scaleX * pixelRatio)
-  canvas.height = Math.floor(crop.height * scaleY * pixelRatio)
+  const cropScale = scaleX > scaleY ? scaleY : scaleX
+  canvas.width = Math.floor(crop.width * cropScale * pixelRatio)
+  canvas.height = Math.floor(crop.height * cropScale * pixelRatio)
 
   ctx.scale(pixelRatio, pixelRatio)
   ctx.imageSmoothingQuality = 'high'
@@ -54,26 +55,26 @@ export async function canvasPreview(
   if (image.naturalWidth > image.naturalHeight) {
     ctx.drawImage(
       image,
-      (image.naturalWidth - image.naturalHeight)/2,
+      (image.naturalWidth - image.naturalHeight) / (2 * scale),
       0,
       image.naturalHeight,
       image.naturalHeight,
       0,
       0,
-      image.naturalWidth,
+      image.naturalHeight,
       image.naturalHeight,
     )
   } else {
     ctx.drawImage(
       image,
       0,
-      (image.naturalHeight - image.naturalWidth)/2,
+      (image.naturalHeight - image.naturalWidth) / (2 * scale),
       image.naturalWidth,
       image.naturalWidth,
       0,
       0,
       image.naturalWidth,
-      image.naturalHeight,
+      image.naturalWidth,
     )
   }
   // ctx.drawImage(
