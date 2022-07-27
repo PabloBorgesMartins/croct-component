@@ -20,7 +20,6 @@ function centerAspectCrop(
     mediaHeight: number,
     aspect: number,
 ) {
-    console.log("media", mediaWidth, mediaHeight, aspect)
     return centerCrop(
         makeAspectCrop(
             {
@@ -43,8 +42,7 @@ export function Demo({ }) {
     const [crop, setCrop] = useState<Crop>()
     const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
     const [scale, setScale] = useState(1)
-    const [rotate, setRotate] = useState(0)
-    const [aspect, setAspect] = useState<number | undefined>(1)
+    const aspect = 1;
 
     //save the resulted image
     const [result, setResult] = useState("");
@@ -68,10 +66,6 @@ export function Demo({ }) {
         }
     }
 
-    useEffect(() => {
-        console.log("crop agora", crop);
-    }, [crop])
-
     useDebounceEffect(
         async () => {
             if (
@@ -85,12 +79,11 @@ export function Demo({ }) {
                     previewCanvasRef.current,
                     completedCrop,
                     scale,
-                    rotate,
                 )
             }
         },
         100,
-        [completedCrop, scale, rotate],
+        [completedCrop, scale],
     );
 
     const handleCompleted = useCallback((e: any) => {
@@ -104,18 +97,6 @@ export function Demo({ }) {
             )
     }, [setCompletedCrop, crop, imgRef]);
 
-    const handleTeste = useCallback(() => {
-        setScale(val => val + 0.1);
-        // if (crop)
-        //     setCrop({
-        //         unit: '%',
-        //         x: crop.x,
-        //         y: crop.y,
-        //         width: crop.width,
-        //         height: crop.height
-        //     })
-    }, [crop, setCrop, setScale]);
-
     const getCroppedImg = useCallback(async () => {
         if (
             completedCrop?.width &&
@@ -127,10 +108,9 @@ export function Demo({ }) {
                     imgRef.current,
                     completedCrop,
                     scale,
-                    rotate,
                 )
             )
-    }, [imgRef, completedCrop, scale, rotate]);
+    }, [imgRef, completedCrop, scale]);
 
     return (
         <div className="App">
@@ -152,7 +132,6 @@ export function Demo({ }) {
                         zoon out
                     </button>
                     <button onClick={() => setScale(val => val + 0.1)}>
-                        {/* <button onClick={handleTeste}> */}
                         zoon in
                     </button>
                     <button onClick={getCroppedImg}>
@@ -163,6 +142,7 @@ export function Demo({ }) {
 
             {Boolean(imgSrc) && (
                 <ReactCrop
+                    disabled
                     crop={crop}
                     onChange={(_, percentCrop) => setCrop(percentCrop)}
                     // onComplete={(c) => setCompletedCrop(c)}
@@ -175,7 +155,7 @@ export function Demo({ }) {
                         alt="Crop me"
                         src={imgSrc}
                         style={{
-                            transform: `scale(${scale}) rotate(${rotate}deg)`,
+                            transform: `scale(${scale})`,
                             objectFit: 'cover',
                             width: 200,
                             height: 200,

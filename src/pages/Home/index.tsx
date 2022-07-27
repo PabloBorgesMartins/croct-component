@@ -11,12 +11,12 @@ export function Home() {
 
   const handleSubmitForm = (evt: any) => {
     evt.preventDefault();
-    console.log("handleSubmitForm", evt.target.avatarUpload)
+    console.log("handleSubmitForm", evt.target.avatarUpload.value)
   }
 
   return (
     <Container>
-      {/* <form
+      <form
         onSubmit={handleSubmitForm}
       >
         <AvatarUpload
@@ -24,8 +24,8 @@ export function Home() {
           // onChange={(evt) => setSelectedFile(evt.target.files[0])}
         />
         <button type="submit">submit</button>
-      </form> */}
-      <Demo />
+      </form>
+      {/* <Demo /> */}
     </Container>
   );
 }

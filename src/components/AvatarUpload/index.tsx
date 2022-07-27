@@ -5,6 +5,7 @@ import {
 } from './styles';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import ReactCrop, { Crop } from 'react-image-crop';
+import { ImageCropper } from "../ImageCropper";
 
 type InputProps = JSX.IntrinsicElements['input'];
 
@@ -13,11 +14,7 @@ interface FileModified extends File {
 }
 
 export function AvatarUpload({ ...props }: InputProps) {
-
-  const [file, setFile] = useState<FileModified>();
-
   // const onDrop = useCallback((acceptedFiles: any) => {
-
   //   acceptedFiles.forEach((file: File) => {
   //     const reader = new FileReader()
 
@@ -31,14 +28,19 @@ export function AvatarUpload({ ...props }: InputProps) {
   //     }
   //     reader.readAsArrayBuffer(file)
   //   })
-
   // }, [])
   // const { getRootProps, getInputProps } = useDropzone({ onDrop })
+
+  const [file, setFile] = useState<FileModified>();
+  const [avatar, setAvatar] = useState("");
+  const [scale, setScale] = useState(1);
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: {
       'image/*': ['.png', '.jpeg', '.jpg']
     },
+    noDragEventsBubbling: true,
+    noClick: file ? true : false,
     onDrop: acceptedFiles => {
       setFile(Object.assign(acceptedFiles[0], {
         preview: URL.createObjectURL(acceptedFiles[0])
@@ -55,10 +57,6 @@ export function AvatarUpload({ ...props }: InputProps) {
     // return () => files.forEach(file => URL.revokeObjectURL(file.webkitRelativePath));
   }, []);
 
-
-
-  //save the image that used to be crop
-  const [image, setImage] = useState(null);
   //change the aspect ratio of crop tool as you preferred
   const [crop, setCrop] = useState<Crop>({
     unit: '%', // Can be 'px' or '%'
@@ -74,23 +72,39 @@ export function AvatarUpload({ ...props }: InputProps) {
       <Container {...getRootProps()}>
         {
           file ? (
-            <Display>
-              {/* <img src={file?.preview} alt="" /> */}
+            <>
+              <ImageCropper
+                imgSrc={file.preview}
+                scale={scale}
+                setImgCropped={setAvatar}
+              />
+              <img
+                alt="Crop me"
+                src={avatar}
+                style={{
+                  width: 200,
+                  height: 200,
+                }}
+              />
               <div>
-                <ReactCrop
-                  circularCrop
-                  aspect={1}
-                  // style={{ maxWidth: "50%" }}
-                  crop={crop}
-                  onChange={setCrop}
-                >
-                  <img src={file.preview} />
-                </ReactCrop>
+                <button onClick={() => setScale(val => val - 0.1)}>
+                  zoon out
+                </button>
+                <button onClick={() => setScale(val => val + 0.1)}>
+                  zoon in
+                </button>
               </div>
-              {/* <button onClick={getCroppedImg}>
-                crop
-              </button> */}
-            </Display>
+            </>
+            // <Display>
+            //   <ReactCrop
+            //     circularCrop
+            //     aspect={1}
+            //     crop={crop}
+            //     onChange={setCrop}
+            //   >
+            //     <img src={file.preview} />
+            //   </ReactCrop>
+            // </Display>
           ) : (
             <>
               <input {...getInputProps()} />

@@ -1,12 +1,9 @@
 import { PixelCrop } from 'react-image-crop'
 
-const TO_RADIANS = Math.PI / 180
-
 export async function getCropped(
   image: HTMLImageElement,
   crop: PixelCrop,
   scale = 1,
-  rotate = 0,
 ) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
